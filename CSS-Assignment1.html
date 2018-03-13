@@ -1,0 +1,163 @@
+<html>
+<head>
+<style>
+body {
+	background-image: url("background.jpg");
+	margin: auto;
+	font-family: "Helvetica";
+	color: dodgerblue;
+}
+
+h1 {
+	text-align: center;
+	font-size: 64px;
+}
+
+p {
+	text-align: center;
+	font-size: 32px;
+}
+
+#buttons {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+#mouseOver {
+	padding-top: 25px;
+	text-align: center;
+	font-size: 32px;
+}
+
+#leaderListDiv {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 32px;
+}
+
+button {
+    background-color: dodgerblue; 
+    border: none;
+    color: crimson;
+    padding: 10px 64px;
+    text-align: center;
+    font-size: 20px;
+}
+
+</style>
+</head>
+<body>
+
+	<h1 id="header">Client Side Scripting - Assignment 1</h1>
+	<p id="p1">Point to your Leader</p>
+	<div id="images"></div>
+	<div id="buttons">
+		<button id="remove">Remove</button>
+		<button id="add">Add</button>
+		<button id="swap">Swap</button>
+	</div>
+	<div id="mouseOver"></div>
+	<div id="leaderListDiv">
+		<ul id="leaderList"></ul>
+	</div>
+	<script>
+
+	var leaders = ["Adams","Butt","Clinton","Duterte","Kuan-Yew","Pinochet","Putin","Stalin","Tepes","Trump"];
+	var imgDiv = document.getElementById("images");
+	var buttonDiv = document.getElementById("buttons");
+	var list = document.getElementById("leaderList");
+	//to count images on screen
+	var imageCounter = 0;
+	//to remember the current image
+	var listCounter = 0;
+
+	window.onload = function()
+	{
+		for(i=0;i<3;i++)
+		{
+			addImage();
+		}
+
+		document.getElementById("remove").addEventListener("click", removeImage);
+		document.getElementById("add").addEventListener("click", addImage);
+		document.getElementById("swap").addEventListener("click", swapImage);
+		document.getElementById("remove").addEventListener("click", checkNumber);
+		document.getElementById("add").addEventListener("click", checkNumber);
+	}
+
+	function addImage()
+	{
+		if(imageCounter <10)
+		{
+			var imgElement = document.createElement("img");
+			imgElement.setAttribute("src","images/"+leaders[listCounter]+".jpg");
+			imgElement.setAttribute("name",leaders[listCounter]);
+			imgElement.setAttribute("width","150");
+			imgElement.setAttribute("hspace","5");
+			imgElement.setAttribute("vspace","5");
+			imgElement.setAttribute("height","150");
+			imgElement.addEventListener("mouseover", function(){document.getElementById("mouseOver").innerHTML = "Your leader is "+this.name+".";});
+			imgDiv.appendChild(imgElement);
+			addToList();
+			imageCounter++;
+			listCounter++;
+		}
+		else if(imageCounter >=10)
+		{
+			alert("Cannot have more than 10 images!");
+			imageCounter = 10;
+		}
+	}
+
+	function removeImage()
+	{
+		if(imageCounter>0)
+		{
+			imageCounter--;
+			imgDiv.removeChild(imgDiv.childNodes[0]);
+			removeFromList();
+		}
+		else
+		{
+			alert("Cannot have no images!");
+			imageCounter = 1;
+		}
+	}
+
+	function swapImage()
+	{
+		var last = imgDiv.lastElementChild;
+		imgDiv.replaceChild(imgDiv.firstElementChild, imgDiv.lastElementChild);
+		imgDiv.insertBefore(last, imgDiv.firstElementChild);
+	}
+
+	//This is to allow the images to be cycled indefinitely in order as long as the total number on screen is below 11. 
+	function checkNumber()
+	{
+		if(listCounter == 10)
+		{
+			listCounter = 0;
+		}
+		else if(listCounter == -1)
+		{
+			listCounter = 9;
+		}
+	}
+
+	function addToList()
+	{	
+		var li = document.createElement("li");
+		var node = document.createTextNode(leaders[listCounter]+" ");
+		li.appendChild(node);
+		list.appendChild(li);
+	}
+
+	function removeFromList()
+	{
+		list.removeChild(list.childNodes[0]);
+	}
+	</script>
+</body>
+</html>
